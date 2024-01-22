@@ -1,0 +1,42 @@
+version: 0.2
+
+env:
+  variables:
+    FRONTEND_IMAGE: "chatapp-frontend"
+    BACKEND_IMAGE: "chatapp-backend"
+  git-credential-helper: yes
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - REPOSITORY_URI=476194719932.dkr.ecr.eu-west-1.amazonaws.com/chatapp-alphasense-test
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - echo Building the Docker image for the frontend...
+      - docker build -t $FRONTEND_IMAGE ./frontend
+      - echo Building the Docker image for the backend...
+      - docker build -t $BACKEND_IMAGE ./backend
+  post_build:
+    commands:
+      - echo Tagging the Docker images...
+      - docker tag $FRONTEND_IMAGE "${REPOSITORY_URI}:${IMAGE_TAG}_frontend"
+      - docker tag $BACKEND_IMAGE "${REPOSITORY_URI}:${IMAGE_TAG}_backend"
+      - echo Pushing the Docker images...
+      - docker push "${REPOSITORY_URI}:${IMAGE_TAG}_frontend"
+      - docker push "${REPOSITORY_URI}:${IMAGE_TAG}_backend"
+      - echo Writing image definitions file for frontend...
+      - printf '[{"name":"frontend-container","imageUri":"%s"}]' "${REPOSITORY_URI}:${IMAGE_TAG}_frontend" > imagedefinitions-frontend.json
+      - echo Writing image definitions file for backend...
+      - printf '[{"name":"backend-container","imageUri":"%s"}]' "${REPOSITORY_URI}:${IMAGE_TAG}_backend" > imagedefinitions-backend.json
+artifacts:
+  secondary-artifacts:
+    frontendArtifact:
+      files:
+        - imagedefinitions-frontend.json
+    backendArtifact:
+      files:
+        - imagedefinitions-backend.json
