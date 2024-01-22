@@ -6,8 +6,8 @@ export class ECRStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
-        new Repository(this, `chatapp-alphasense-test`, {
-            repositoryName: `chatapp-alphasense-test`,
+        new Repository(this, `chatapp-alphasense`, {
+            repositoryName: `chatapp-alphasense`,
         });
     }
 }
