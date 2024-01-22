@@ -13,12 +13,7 @@ import { Construct } from 'constructs';
 
 export class PipelineStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
-        super(scope, id, {
-            ...props,
-            env: {
-                region: 'eu-west-1'
-            },
-        });
+        super(scope, id, props);
 
         const buildRole = Role.fromRoleArn(this, 'Role', 'arn:aws:iam::476194719932:role/CodeDeployRole');
 
