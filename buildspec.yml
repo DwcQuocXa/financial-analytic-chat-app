@@ -38,15 +38,17 @@ phases:
     commands:
       - echo Tagging the Docker images...
       - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 476194719932.dkr.ecr.eu-west-1.amazonaws.com
+      - docker tag $FRONTEND_IMAGE "${REPOSITORY_URI}:$latest_frontend"
       - docker tag $FRONTEND_IMAGE "${REPOSITORY_URI}:${IMAGE_TAG}_frontend"
+      - docker tag $BACKEND_IMAGE "${REPOSITORY_URI}:$latest_backend"
       - docker tag $BACKEND_IMAGE "${REPOSITORY_URI}:${IMAGE_TAG}_backend"
       - echo Pushing the Docker images...
-      - docker push "${REPOSITORY_URI}:${IMAGE_TAG}_frontend"
-      - docker push "${REPOSITORY_URI}:${IMAGE_TAG}_backend"
+      - docker push "${REPOSITORY_URI}:$latest_frontend"
+      - docker push "${REPOSITORY_URI}:$latest_backend"
       - echo Writing image definitions file for frontend...
-      - printf '[{"name":"frontend-container","imageUri":"%s"}]' "${REPOSITORY_URI}:${IMAGE_TAG}_frontend" > imagedefinitions-frontend.json
+      - printf '[{"name":"frontend-container","imageUri":"%s"}]' "${REPOSITORY_URI}:$latest_frontend" > imagedefinitions-frontend.json
       - echo Writing image definitions file for backend...
-      - printf '[{"name":"backend-container","imageUri":"%s"}]' "${REPOSITORY_URI}:${IMAGE_TAG}_backend" > imagedefinitions-backend.json
+      - printf '[{"name":"backend-container","imageUri":"%s"}]' "${REPOSITORY_URI}:$latest_backend" > imagedefinitions-backend.json
 artifacts:
   secondary-artifacts:
     frontendArtifact:

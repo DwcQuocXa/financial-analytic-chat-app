@@ -14,6 +14,10 @@ const channels: Channel[] = [
     { name: 'random', messages: [] }
 ];
 
+app.get('/', (req, res) => {
+    res.status(200).send('Ronaldo is the GOAT!!');
+});
+
 // GET channels
 app.get('/channels', (req, res) => {
     res.json(channels.map(channel => channel.name));

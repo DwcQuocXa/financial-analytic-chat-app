@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { ECRStack } from '../lib/ecr-stack';
 import { PipelineStack } from '../lib/pipeline-stack';
+import { EcsCluster } from '../lib/ecs-cluster-stack';
 
 const app = new cdk.App();
 
@@ -11,5 +12,9 @@ new ECRStack(app, 'ECRStack', {
 });
 
 new PipelineStack(app, 'PipelineStack', {
+    env: { account: '476194719932', region: 'eu-west-1' },
+});
+
+new EcsCluster(app, 'EcsCluster', {
     env: { account: '476194719932', region: 'eu-west-1' },
 });
