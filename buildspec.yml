@@ -5,6 +5,8 @@ env:
     FRONTEND_IMAGE: "chatapp-frontend"
     BACKEND_IMAGE: "chatapp-backend"
   git-credential-helper: yes
+  secrets-manager:
+    REACT_APP_API_URL: "chatapp-alphasense-MAcSmc:REACT_APP_API_URL"
 
 phases:
   install:
