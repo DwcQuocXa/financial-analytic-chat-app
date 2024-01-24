@@ -1,6 +1,13 @@
 import { Stack, StackProps, Duration } from 'aws-cdk-lib';
 import { Artifact, Pipeline, ArtifactPath } from 'aws-cdk-lib/aws-codepipeline';
-import { Cache, ComputeType, LinuxBuildImage, LocalCacheMode, PipelineProject } from 'aws-cdk-lib/aws-codebuild';
+import {
+    BuildEnvironmentVariableType,
+    Cache,
+    ComputeType,
+    LinuxBuildImage,
+    LocalCacheMode,
+    PipelineProject,
+} from 'aws-cdk-lib/aws-codebuild';
 import {
     CodeBuildAction,
     CodeBuildActionType,
@@ -60,6 +67,12 @@ export class PipelineStack extends Stack {
             outputs: [frontendBuildOutput, backendBuildOutput],
             executeBatchBuild: false,
             type: CodeBuildActionType.BUILD,
+            environmentVariables: {
+                REACT_APP_API_URL: {
+                    value: 'arn:aws:secretsmanager:eu-west-1:476194719932:secret:chatapp-alphasense-MAcSmc:REACT_APP_API_URL',
+                    type: BuildEnvironmentVariableType.SECRETS_MANAGER,
+                },
+            },
         });
 
         const deployToFrontendAction = new EcsDeployAction({

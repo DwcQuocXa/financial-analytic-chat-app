@@ -68,7 +68,7 @@ export class EcsCluster extends Stack {
         const backendLb = this.createApplicationLoadBalancer(getExistingVpc, 'ChatAppAlphaSense_Backend_ALB',  backendTargetGroup);
 
         const backendEnv = {}
-        const backendFargateService = this.createFargateService(cluster, repo, backendTargetGroup, 4000, 'backend-fargate', backendEnv);
+        const backendFargateService = this.createFargateService(cluster, repo, backendTargetGroup, 4000, 'backend', backendEnv);
 
         const backendLbUrl = backendLb.loadBalancerDnsName;
 
@@ -77,7 +77,7 @@ export class EcsCluster extends Stack {
             REACT_APP_API_URL: backendLbUrl,
         }
 
-        const frontendFargateService = this.createFargateService(cluster, repo, frontendTargetGroup, 80, 'frontend-fargate', frontendEnv);
+        const frontendFargateService = this.createFargateService(cluster, repo, frontendTargetGroup, 80, 'frontend', frontendEnv);
 
         new CfnOutput(this, 'BackendLBUrl', { value: backendLbUrl });
         new CfnOutput(this, 'FrontendLBUrl', { value: frontendLb.loadBalancerDnsName });
