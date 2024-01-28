@@ -23,7 +23,9 @@ export const postNewMessage = async (req: Request, res: Response) => {
 
         try {
             if (channelName === 'general' || channelName === 'random') {
-                res.status(200).json({ sender: MessageSender.GPT, content: 'There is no chatbot in this channel. Please create a new channel with the name of the channel is company ticker. Have a great day!!!', time: new Date() });
+                const newMessage = { sender: MessageSender.GPT, content: 'There is no chatbot in this channel. Please create a new channel with the name of the channel is company ticker. Have a great day!!!', time: new Date() }
+                channel.messages.push(newMessage);
+                res.status(200).json(newMessage);
             } else {
                 const chain = await createConversationalChain();
 

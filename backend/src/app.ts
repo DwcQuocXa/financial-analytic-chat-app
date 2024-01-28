@@ -14,6 +14,10 @@ const port = process.env.PORT || 4000;
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+    res.status(200).send('Ronaldo is the GOAT!!');
+});
+
 app.use(channelRoutes);
 app.use(messageRoutes);
 
