@@ -1,20 +1,39 @@
 # AlphaSense Home Test - Ngo Gia Duc
 
-Email: duc@email
+Email: duc.ngogia2002@gmail.com
+
+### Link Demo: http://ecsclu-chata-sqcmtc8ivsc7-626708928.eu-west-1.elb.amazonaws.com/
 
 ## Tasks Status
 
-### React Client Features
-- [x] **Client Visuals**
-- [x] **Interactions**
-- [x] **State**
-- [x] **Messages**
+### React Frontend
+- [x] Render a full page application with three panels.
+- [x] Navigation panel shows a list of channels.
+- [x] Message list panel shows a list of message bodies for one channel.
+- [x] Editor panel shows a text area input.
+- [x] Editor panel is hidden if there is no channel selected.
+- [x] Editor has a submit button.
+- [x] Submit button is disabled if there is no text in message body.
+- [x] Clicking a channel in navigation panel selects that channel.
+- [x] Entering text in editor and clicking submit adds message to the currently selected channel.
+- [x] Submitting editor clears input.
+- [x] Switching channels clears input.
+- [x] Channel list is loaded once on loading the application.
+- [x] Initially no channel is selected.
+- [x] Messages are loaded from remote on channel selection and updated to screen.
+- [x] Messages are also stored to local state after loading from remote.
+- [x] Editing is not required, only creation.
+- [x] Upon submitting a message to a channel, that message is available for other users.
+- [x] Submitting user sees message in message list after submitting.
+- [x] Render created message in the list immediately before refreshing from backend.
 
-### NodeJS Backend Features
-- [x] **Channel and Message Storage**
-- [x] **GET Endpoint for Channels**
-- [x] **GET Endpoint for Channel’s Messages**
-- [x] **POST Endpoint for New Messages**
+### ExpressJs Backend
+- [x] Channel and message storage can be an in-memory database.
+- [x] On server start, storage is populated with a fixed set of empty channels.
+- [x] GET endpoint for querying channels.
+- [x] GET endpoint for querying channel’s messages.
+- [x] POST endpoint for submitting new messages to a channel.
+
 
 ## Instructions
 
@@ -53,30 +72,3 @@ Email: duc@email
 
 ## Detailed Features
 
-### React Client Details
-- [x] Render a full page application with three panels.
-- [x] Navigation panel shows a list of channels.
-- [x] Message list panel shows a list of message bodies for one channel.
-- [x] Editor panel shows a text area input.
-- [x] Editor panel is hidden if there is no channel selected.
-- [x] Editor has a submit button.
-- [x] Submit button is disabled if there is no text in message body.
-- [x] Clicking a channel in navigation panel selects that channel.
-- [x] Entering text in editor and clicking submit adds message to the currently selected channel.
-- [x] Submitting editor clears input.
-- [x] Switching channels clears input.
-- [x] Channel list is loaded once on loading the application.
-- [x] Initially no channel is selected.
-- [x] Messages are loaded from remote on channel selection and updated to screen.
-- [x] Messages are also stored to local state after loading from remote.
-- [x] Editing is not required, only creation.
-- [x] Upon submitting a message to a channel, that message is available for other users.
-- [x] Submitting user sees message in message list after submitting.
-- [x] Render created message in the list immediately before refreshing from backend.
-
-### NodeJS Backend Details
-- [x] Channel and message storage can be an in-memory database (global variable etc.).
-- [x] On server start, storage is populated with a fixed set of empty channels.
-- [x] GET endpoint for querying channels.
-- [x] GET endpoint for querying channel’s messages.
-- [x] POST endpoint for submitting new messages to a channel.

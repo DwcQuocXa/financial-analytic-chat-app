@@ -22,18 +22,22 @@ export const postNewMessage = async (req: Request, res: Response) => {
         channel.messages.push({ sender: MessageSender.USER, content: userMessage, time: new Date() });
 
         try {
-            const chain = await createConversationalChain();
+            if (channelName === 'general' || channelName === 'random') {
+                res.status(200).json({ sender: MessageSender.GPT, content: 'There is no chatbot in this channel. Please create a new channel with the name of the channel is company ticker. Have a great day!!!', time: new Date() });
+            } else {
+                const chain = await createConversationalChain();
 
-            const response = await chain.invoke({
-                question: `About ${channelName} and the relevant information, ${userMessage}`,
-                channelName,
-            });
+                const response = await chain.invoke({
+                    question: `About ${channelName} and the relevant information, ${userMessage}`,
+                    channelName,
+                });
 
-            const newMessage = { sender: MessageSender.GPT, content: response.result, time: new Date() };
+                const newMessage = { sender: MessageSender.GPT, content: response.result, time: new Date() };
 
-            channel.messages.push(newMessage);
+                channel.messages.push(newMessage);
 
-            res.status(200).json(newMessage);
+                res.status(200).json(newMessage);
+            }
         } catch (error) {
             console.error('Error handling message:', error);
             res.status(500).send('Error generating response');

@@ -5,8 +5,9 @@ import './index.css';
 
 const rootElement = document.getElementById('root');
 
-ReactDOM.render((
+ReactDOM.render(
     <React.StrictMode>
         <App />
-    </React.StrictMode>
-), rootElement);
+    </React.StrictMode>,
+    rootElement,
+);

@@ -7,8 +7,8 @@ import {
 } from '../services/integration /alphaVantage.service';
 
 export const channels: Channel[] = [
-    /*{ name: 'general', messages: [] },
-    { name: 'random', messages: [] },*/
+    { name: 'general', messages: [] },
+    { name: 'random', messages: [] },
 ];
 
 export const getChannels = (req: Request, res: Response) => {

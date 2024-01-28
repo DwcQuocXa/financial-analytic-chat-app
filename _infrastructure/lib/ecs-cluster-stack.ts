@@ -10,6 +10,7 @@ import {
     LogDriver,
     DeploymentControllerType,
     FargateService,
+    Secret as ecsSecret,
 } from 'aws-cdk-lib/aws-ecs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import {
@@ -21,6 +22,7 @@ import {
     ListenerAction, Protocol, IApplicationTargetGroup,
 } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { Construct } from 'constructs/lib/construct';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 
 export class EcsCluster extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
@@ -67,21 +69,25 @@ export class EcsCluster extends Stack {
         const frontendLb = this.createApplicationLoadBalancer(getExistingVpc, 'ChatAppAlphaSense_Frontend_ALB',  frontendTargetGroup);
         const backendLb = this.createApplicationLoadBalancer(getExistingVpc, 'ChatAppAlphaSense_Backend_ALB',  backendTargetGroup);
 
-        const backendEnv = {}
+        const backendSecret = Secret.fromSecretCompleteArn(
+            this,
+            `chatapp-alphasense-backend-secrets`,
+            `arn:aws:secretsmanager:eu-west-1:476194719932:secret:chatapp-alphasense-MAcSmc`,
+        );
+
+        const backendEnv = {
+            ALPHA_VANTAGE_API_KEY: ecsSecret.fromSecretsManager(backendSecret, 'ALPHA_VANTAGE_API_KEY'),
+            OPENAI_API_KEY: ecsSecret.fromSecretsManager(backendSecret, 'OPENAI_API_KEY')
+        }
+
         const backendFargateService = this.createFargateService(cluster, repo, backendTargetGroup, 4000, 'backend', backendEnv);
 
         const backendLbUrl = backendLb.loadBalancerDnsName;
 
-        const frontendEnv = {
-            /*REACT_APP_API_URL: 'http://chatapp-alphasense-backend-alb-1b7c9e5b7f7b4a2f.elb.eu-west-1.amazonaws.com',*/
-            REACT_APP_API_URL: backendLbUrl,
-        }
-
-        const frontendFargateService = this.createFargateService(cluster, repo, frontendTargetGroup, 80, 'frontend', frontendEnv);
+        const frontendFargateService = this.createFargateService(cluster, repo, frontendTargetGroup, 80, 'frontend', {});
 
         new CfnOutput(this, 'BackendLBUrl', { value: backendLbUrl });
         new CfnOutput(this, 'FrontendLBUrl', { value: frontendLb.loadBalancerDnsName });
-        new CfnOutput(this, 'frontendEnv', { value: frontendEnv.REACT_APP_API_URL });
     }
 
     createApplicationLoadBalancer(
@@ -127,7 +133,7 @@ export class EcsCluster extends Stack {
         targetGroup: IApplicationTargetGroup,
         containerPort: number,
         serviceName: string,
-        environment: { [key: string]: string }
+        environment: any
     ): FargateService {
         const fargateTask = new FargateTaskDefinition(this, `${serviceName}-taskDefinition`, {
             memoryLimitMiB: 2048,
@@ -143,7 +149,7 @@ export class EcsCluster extends Stack {
                 streamPrefix: `ecs/${serviceName}-fargate`,
                 logRetention: RetentionDays.ONE_MONTH
             }),
-            environment
+            secrets: environment
         });
 
         container.addPortMappings({

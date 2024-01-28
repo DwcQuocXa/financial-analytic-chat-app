@@ -9,7 +9,7 @@ import messageRoutes from './routes/messageRoutes';
 
 const app = express();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
 app.use(cors());
