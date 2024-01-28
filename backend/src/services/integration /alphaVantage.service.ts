@@ -30,26 +30,6 @@ const fetchAlphaVantageFundamentalData = async (functionType: string, ticker: st
     }
 };
 
-export const getCompanyOverview = async (ticker: string): Promise<any> => {
-    return fetchAlphaVantageFundamentalData('OVERVIEW', ticker);
-};
-
-export const getIncomeStatement = async (ticker: string): Promise<any> => {
-    return fetchAlphaVantageFundamentalData('INCOME_STATEMENT', ticker);
-};
-
-export const getBalanceSheet = async (ticker: string): Promise<any> => {
-    return fetchAlphaVantageFundamentalData('BALANCE_SHEET', ticker);
-};
-
-export const getCashFlow = async (ticker: string): Promise<any> => {
-    return fetchAlphaVantageFundamentalData('CASH_FLOW', ticker);
-};
-
-export const getEarnings = async (ticker: string): Promise<any> => {
-    return fetchAlphaVantageFundamentalData('EARNINGS', ticker);
-};
-
 export const fetchFinancialData = async (type: string, ticker: string): Promise<any> => {
     return fetchAlphaVantageFundamentalData(type, ticker);
 };

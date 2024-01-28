@@ -31,23 +31,19 @@ export const createChannel = async (req: Request, res: Response) => {
                 financialData[type] = await fetchFinancialData(type, channelName);
             }
 
-            // Create a directory for the channel in dummyData
             const channelDir = path.join(__dirname, '../../dummyData', channelName);
             await fs.mkdir(channelDir, { recursive: true });
 
-            // Save each data object to a separate JSON file
             for (const [key, value] of Object.entries(financialData)) {
                 const fileName = `${key.toLowerCase()}.json`;
                 await fs.writeFile(path.join(channelDir, fileName), JSON.stringify(value, null, 2));
             }
 
-            // Create new channel with financial data
             const newChannel = {
                 name: channelName,
                 messages: [],
             };
 
-            // Add the new channel to the channels array
             channels.push(newChannel);
             res.status(200).send(newChannel);
         } catch (error) {
