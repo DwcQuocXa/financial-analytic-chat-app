@@ -1,0 +1,24 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import channelRoutes from './routes/channelRoutes';
+import messageRoutes from './routes/messageRoutes';
+
+const app = express();
+
+const port = process.env.PORT;
+
+app.use(bodyParser.json());
+app.use(cors());
+
+app.use(channelRoutes);
+app.use(messageRoutes);
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
+export default app;

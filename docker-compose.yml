@@ -1,0 +1,20 @@
+version: '3'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    command: npm start
+    environment:
+      - PORT=3000
+  backend:
+    build: ./backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+    command: npm run start
+    environment:
+      - PORT=4000
