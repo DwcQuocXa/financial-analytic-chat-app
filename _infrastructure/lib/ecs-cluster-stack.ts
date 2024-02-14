@@ -17,9 +17,8 @@ import {
     ApplicationProtocol,
     ApplicationLoadBalancer,
     ApplicationTargetGroup,
-    SslPolicy,
     TargetType,
-    ListenerAction, Protocol, IApplicationTargetGroup,
+    Protocol, IApplicationTargetGroup,
 } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { Construct } from 'constructs/lib/construct';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -105,24 +104,6 @@ export class EcsCluster extends Stack {
             open: true,
             defaultTargetGroups: [targetGroup]
         });
-
-        /*loadBalancer.addListener('HttpsListener', {
-            port: 443,
-            open: true,
-            protocol: ApplicationProtocol.HTTPS,
-            sslPolicy: SslPolicy.RECOMMENDED,
-            defaultTargetGroups: [targetGroup]
-        });
-
-        loadBalancer.addListener('HttpListener', {
-            port: 80,
-            open: true,
-            defaultAction: ListenerAction.redirect({
-                protocol: 'HTTPS',
-                port: '443',
-                permanent: true
-            }),
-        });*/
 
         return loadBalancer;
     }

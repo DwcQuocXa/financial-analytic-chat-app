@@ -2,16 +2,24 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { Request, Response } from 'express';
 import { Channel } from '../models/Channel';
-import {
-    fetchFinancialData,
-} from '../services/integration /alphaVantage.service';
+import { fetchFinancialData } from '../services/integration /alphaVantage.service';
+import { transformStructuredDataToNarrative } from '../services/integration /langchain.service';
+import { getAllReportMetadata, insertNarrativesIntoDatabase } from '../services/integration /mongodb.service';
 
 export const channels: Channel[] = [
     { name: 'general', messages: [] },
     { name: 'random', messages: [] },
 ];
 
-export const getChannels = (req: Request, res: Response) => {
+export const getChannels = async (req: Request, res: Response) => {
+    const reportMetadata = await getAllReportMetadata()
+
+    reportMetadata.map((metadata) => metadata.ticker).forEach(ticker => {
+        if (!channels.find(channel => channel.name === ticker)) {
+            channels.push({ name: ticker, messages: [] });
+        }
+    });
+
     res.json(channels.map((channel) => channel.name));
 };
 
@@ -39,6 +47,9 @@ export const createChannel = async (req: Request, res: Response) => {
                 await fs.writeFile(path.join(channelDir, fileName), JSON.stringify(value, null, 2));
             }
 
+            const narrativeDocuments = await transformStructuredDataToNarrative(channelName);
+            await insertNarrativesIntoDatabase(narrativeDocuments, channelName);
+
             const newChannel = {
                 name: channelName,
                 messages: [],
@@ -47,8 +58,8 @@ export const createChannel = async (req: Request, res: Response) => {
             channels.push(newChannel);
             res.status(200).send(newChannel);
         } catch (error) {
-            console.error('Error fetching data from Alpha Vantage:', error);
-            res.status(500).send('Error fetching financial data');
+            console.error('Error createChannel:', error);
+            res.status(500).send('Error createChannel');
         }
     }
 };

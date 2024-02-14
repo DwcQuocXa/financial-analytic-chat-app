@@ -1,32 +1,28 @@
 import axios from 'axios';
 
-const ALPHA_VANTAGE_API_KEY = process.env.ALPHA_VANTAGE_API_KEY;
 const BASE_URL = 'https://www.alphavantage.co/query';
 
 const fetchAlphaVantageFundamentalData = async (functionType: string, ticker: string): Promise<any> => {
+    const url = `${BASE_URL}?function=${functionType}&symbol=${ticker}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`;
+
     try {
-        const response = await axios.get(
-            `${BASE_URL}?function=${functionType}&symbol=${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}`,
-        );
+        const { data, status } = await axios.get(url);
 
-        // Check for 'Information' property in response data
-        if (response.data && response.data['Information']) {
-            throw new Error(`Error from Alpha Vantage API: ${response.data['Information']}`);
+        if (status !== 200 || !data) {
+            throw new Error(`Failed to fetch ${functionType} data with status code: ${status}`);
+        }
+        if (data['Information']) {
+            throw new Error(`Error from Alpha Vantage API: ${data['Information']}`);
+        }
+        if (Object.keys(data).length === 0) {
+            throw new Error(`No data found for ${functionType}`);
         }
 
-        if (response.status === 200 && response.data) {
-            return response.data;
-        } else {
-            throw new Error(`Failed to fetch ${functionType} data`);
-        }
+        return data;
     } catch (error) {
-        if (error instanceof Error) {
-            console.error(`Alpha Vantage API Error: ${error.message}`);
-            throw error; // Re-throw the error to be handled by the caller
-        } else {
-            console.error(`An unknown error occurred`);
-            throw new Error('An unknown error occurred in fetching data');
-        }
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred in fetching data';
+        console.error(`Alpha Vantage API Error: ${errorMessage}`);
+        throw new Error(errorMessage);
     }
 };
 
