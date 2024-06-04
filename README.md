@@ -1,20 +1,17 @@
-# AlphaSense Home Assignment - Ngo Gia Duc
+# Financial Analytic Chat app - Ngo Gia Duc
 
 Email: duc.ngogia2002@gmail.com
-
-### Few words:
-I am sorry for submitting the assignment quite late because I want to turn this assignment into something more interesting and relatable to the product AlphaSense Assistant. This Chatbot helps users analyze fundamental financial data like income, earnings,... I put quite a lot of effort here so I hope you will like it. I hope we can have further discussions on this application and the position because I am so passionate about building a chatbot like this.
 
 ### Link Demo:
 I also built CI/CD pipeline for this application. I deployed the application on AWS ECS. Detail in _infrastructure folder
 
-Try it now: [AlphaSense Assignment Demo](http://ecsclu-chata-sqcmtc8ivsc7-626708928.eu-west-1.elb.amazonaws.com/)
+Try it now: [Demo](http://ecsclu-chata-sqcmtc8ivsc7-626708928.eu-west-1.elb.amazonaws.com/)
 
 ### Sample Image:
 ![chat_app_workflow.png](chat_app_interface.png)
 
 ### Relevant Project:
-Check out this chat app that I made few months ago! It uses a language model to summarize news and lets you chat with a bot for more details about the news. This is another one of the reasons why I'd be a great fit to the AlphaSense Assistant team.
+Check out this chat app that I made few months ago! It uses a language model to summarize news and lets you chat with a bot for more details about the news
 
 Check out repo README first!!!
 
